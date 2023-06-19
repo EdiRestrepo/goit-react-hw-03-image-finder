@@ -1,12 +1,13 @@
 import style from './App.module.scss'
 import api from "../../services/api"
 import { Component } from 'react'
+import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
 import Searchbar from '../Searchbar/Searchbar';
 import ImageGallery from '../ImageGallery/ImageGallery';
 import Button from '../Button/Button';
 import Loader from '../Loader/Loader';
-import { Notify } from 'notiflix/build/notiflix-notify-aio';
+
 
 class App extends Component {
   constructor(){
@@ -85,7 +86,14 @@ class App extends Component {
       <div className={style['app']}>
         <Searchbar onSubmit={this.formSubmitHandler}/>
         <ImageGallery>
-          <ImageGalleryItem images={this.state.images}/>
+        {this.state.images.map(({ id, webformatURL, tags, largeImageURL }) => (
+              <ImageGalleryItem
+                key={id}
+                url={webformatURL}
+                alt={tags}
+                largeImage={largeImageURL}
+              />
+            ))}
         </ImageGallery>
         {this.state.isLoading && <Loader/>}
         {this.state.images.length !== 0 && <Button onClick={this.loadMore}/>}
